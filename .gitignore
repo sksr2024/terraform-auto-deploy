@@ -35,3 +35,6 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+cloudfront_s3_architecture.drawio
+cloudfront_s3_architecture.png
