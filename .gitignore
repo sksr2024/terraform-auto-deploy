@@ -37,4 +37,3 @@ override.tf.json
 terraform.rc
 
 cloudfront_s3_architecture.drawio
-cloudfront_s3_architecture.png
