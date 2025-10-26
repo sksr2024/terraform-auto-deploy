@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Terraform S3 Static Site</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        line-height: 1.6;
+        padding: 2rem;
+      }
+      header {
+        margin-bottom: 1.5rem;
+      }
+      code {
+        background: #f3f4f6;
+        padding: 0.2rem 0.4rem;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Terraform S3 + CloudFront デモ</h1>
+      <p>このページは <code>index.html</code> のサンプルです。</p>
+    </header>
+
+    <main>
+      <p>
+        デプロイ後、CloudFront の URL（例:
+        <code>d16a01m71sxnux.cloudfront.net</code>）でアクセスできます。
+      </p>
+      <section>
+        <h2>注意</h2>
+        <ul>
+          <li>機密データはここに置かないでください。</li>
+          <li>S3 と CloudFront の設定に応じてパスやキャッシュが変わります。</li>
+        </ul>
+      </section>
+    </main>
+
+    <footer>
+      <p>生成日時: 2025-10-25</p>
+    </footer>
+  </body>
+</html>
