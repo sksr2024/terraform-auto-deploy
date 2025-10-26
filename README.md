@@ -4,7 +4,7 @@ Infrastructure as Code for deploying a static website on AWS using Terraform.
 
 ## Architecture
 
-![CloudFront + S3 Architecture](./cloudfront_s3_architecture.png)
+![CloudFront + S3 Architecture](./aws_architecture.png)
 
 This project implements a secure access pattern:
 
