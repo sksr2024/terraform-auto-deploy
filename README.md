@@ -1,134 +1,134 @@
-# Terraform AWS Static Website Infrastructure
+# Terraform AWS 静的ウェブサイトインフラストラクチャ
 
-Infrastructure as Code for deploying a static website on AWS using Terraform.
+Terraformを使用してAWS上に静的ウェブサイトをデプロイするためのInfrastructure as Code。
 
-## Architecture
+## アーキテクチャ
 
-![CloudFront + S3 Architecture](./aws_architecture.png)
+![CloudFront + S3 アーキテクチャ](./aws_architecture.png)
 
-This project implements a secure access pattern:
+このプロジェクトは、セキュアなアクセスパターンを実装しています：
 
 ```
-Client → CloudFront (HTTPS) → Origin Access Identity (OAI) → S3 Bucket (Private)
+クライアント → CloudFront (HTTPS) → Origin Access Identity (OAI) → S3バケット（プライベート）
 ```
 
-### Key Components
+### 主要コンポーネント
 
-- **S3 Bucket**: Hosts static site content (private access only)
-- **CloudFront CDN**: Content delivery with HTTPS enforcement
-- **Origin Access Identity (OAI)**: Restricts S3 access to CloudFront only
+- **S3バケット**: 静的サイトコンテンツをホスティング（プライベートアクセスのみ）
+- **CloudFront CDN**: HTTPS強制によるコンテンツ配信
+- **Origin Access Identity (OAI)**: S3へのアクセスをCloudFrontのみに制限
 
-### Security Features
+### セキュリティ機能
 
-- S3 bucket is not publicly accessible
-- CloudFront accesses S3 via OAI only
-- HTTPS enforcement (redirect-to-https policy)
-- Bucket policy grants GetObject permission to OAI canonical user ID only
+- S3バケットは公開アクセス不可
+- CloudFrontはOAI経由でのみS3にアクセス
+- HTTPS強制（redirect-to-httpsポリシー）
+- バケットポリシーはOAIのcanonical user IDにのみGetObject権限を付与
 
-## Requirements
+## 必要要件
 
 - Terraform >= 1.0
-- AWS CLI configured
-- AWS Account
+- AWS CLI（設定済み）
+- AWSアカウント
 
-## Usage
+## 使用方法
 
-### 1. Initial Setup
+### 1. 初期セットアップ
 
 ```bash
-# Clone the repository
+# リポジトリをクローン
 git clone https://github.com/sksr2024/terraform-auto-deploy.git
 cd terraform-auto-deploy
 
-# Create terraform.tfvars and set your bucket name
+# terraform.tfvarsを作成してバケット名を設定
 echo 'bucket_name = "your-unique-bucket-name"' > terraform.tfvars
 ```
 
-### 2. Deploy with Terraform
+### 2. Terraformでデプロイ
 
 ```bash
-# Initialize Terraform
+# Terraformを初期化
 terraform init
 
-# Preview changes
+# 変更内容をプレビュー
 terraform plan
 
-# Deploy infrastructure
+# インフラストラクチャをデプロイ
 terraform apply
 ```
 
-### 3. Check Outputs
+### 3. 出力値を確認
 
 ```bash
 terraform output
 ```
 
-Important outputs:
-- `cloudfront_domain_name`: Public URL to access your site
-- `aws_cloudfront_distribution_id`: Distribution ID for cache invalidation
-- `s3_bucket_name`: Bucket name hosting your site
+重要な出力値：
+- `cloudfront_domain_name`: サイトにアクセスするための公開URL
+- `aws_cloudfront_distribution_id`: キャッシュ無効化に使用するディストリビューションID
+- `s3_bucket_name`: サイトをホスティングするバケット名
 
 ## GitHub Actions CI/CD
 
-This project supports automated deployment using GitHub Actions.
+このプロジェクトはGitHub Actionsを使用した自動デプロイをサポートしています。
 
-### Setup Steps
+### セットアップ手順
 
-1. Go to your GitHub repository: `Settings` → `Secrets and variables` → `Actions`
-2. Add the following secrets:
-   - `AWS_ACCESS_KEY_ID`: Your AWS access key ID
-   - `AWS_SECRET_ACCESS_KEY`: Your AWS secret access key
+1. GitHubリポジトリの `Settings` → `Secrets and variables` → `Actions` に移動
+2. 以下のシークレットを追加：
+   - `AWS_ACCESS_KEY_ID`: AWSアクセスキーID
+   - `AWS_SECRET_ACCESS_KEY`: AWSシークレットアクセスキー
    - `AWS_REGION`: `ap-northeast-1`
-   - `BUCKET_NAME`: S3 bucket name (globally unique)
+   - `BUCKET_NAME`: S3バケット名（グローバルで一意）
 
-3. Push to main branch will automatically trigger Terraform deployment
+3. mainブランチへのプッシュで自動的にTerraformデプロイが実行されます
 
-## File Structure
+## ファイル構成
 
 ```
 .
-├── main.tf                      # Main infrastructure definition
-├── variables.tf                 # Variable definitions
-├── outputs.tf                   # Output definitions
-├── terraform.tfvars             # Variable values (gitignored)
+├── main.tf                      # メインインフラストラクチャ定義
+├── variables.tf                 # 変数定義
+├── outputs.tf                   # 出力値定義
+├── terraform.tfvars             # 変数値（gitignore対象）
 ├── .github/
 │   └── workflows/
-│       └── terraform.yml        # CI/CD workflow
-├── cloudfront_s3_architecture.png  # Architecture diagram
-└── CLAUDE.md                    # Claude Code guidance
+│       └── terraform.yml        # CI/CDワークフロー
+├── cloudfront_s3_architecture.png  # アーキテクチャ図
+└── CLAUDE.md                    # Claude Codeガイダンス
 ```
 
-## Common Commands
+## よく使うコマンド
 
 ```bash
-# Format code
+# コードをフォーマット
 terraform fmt
 
-# Validate configuration
+# 設定を検証
 terraform validate
 
-# Preview changes
+# 変更内容をプレビュー
 terraform plan
 
-# Apply changes
+# 変更を適用
 terraform apply
 
-# Show current state
+# 現在の状態を表示
 terraform show
 
-# Display outputs
+# 出力値を表示
 terraform output
 
-# Destroy infrastructure
+# インフラストラクチャを破棄
 terraform destroy
 ```
 
-## Notes
+## 注意事項
 
-- CloudFront distribution deployment takes 15-20 minutes
-- After uploading content to S3, cache invalidation may be needed for immediate updates
-- `terraform.tfvars` may contain sensitive data and is excluded from version control
+- CloudFrontディストリビューションのデプロイには15〜20分かかります
+- S3へのコンテンツアップロード後、即座に更新を反映させるにはキャッシュ無効化が必要な場合があります
+- `terraform.tfvars` には機密データが含まれる可能性があるため、バージョン管理から除外されています
 
-## License
+## ライセンス
 
 MIT License
